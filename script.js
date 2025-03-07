@@ -13,7 +13,7 @@ document.getElementById("quizForm").addEventListener("submit", function(event) {
     
     // Check if all inputs are valid numbers
     if (answers.some(isNaN)) {
-        alert("Please fill in all the questions with valid numbers.");
+        alert("Please fill in all the questions if you want to be with me.");
         return;
     }
     
