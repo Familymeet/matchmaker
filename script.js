@@ -1,49 +1,38 @@
-document.getElementById("quizForm").addEventListener("submit", function(event) {
-    // Prevents the form from reloading the page
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("quizForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form from reloading the page
+        calculateCompatibility();
+    });
+});
 
-    // Get the user's answers from the form
-    const answers = [
-        parseInt(document.getElementById("q1").value),
-        parseInt(document.getElementById("q2").value),
-        parseInt(document.getElementById("q3").value),
-        parseInt(document.getElementById("q4").value),
-        parseInt(document.getElementById("q5").value)
-    ];
-    
-    // Check if all inputs are valid numbers
-    if (answers.some(isNaN)) {
-        alert("Please fill in all the questions if you want to be with me.");
-        return;
-    }
-    
-
-    // Desired answers (True Love answers)
-    const trueLoveAnswers = [5, 4, 3, 2, 5];  // Example answers for "True Love"
-
-    // Calculate the total difference between the user's answers and the true love answers
-    let totalDifference = 0;
-
-    for (let i = 0; i < answers.length; i++) {
-        totalDifference += Math.abs(answers[i] - trueLoveAnswers[i]);
+function calculateCompatibility() {
+    // Get all the input values
+    let scores = [];
+    for (let i = 1; i <= 5; i++) {
+        let value = parseInt(document.getElementById(`q${i}`).value);
+        if (isNaN(value) || value < 1 || value > 5) {
+            alert("Please enter a valid number between 1 and 5 for all questions.");
+            return;
+        }
+        scores.push(value);
     }
 
-    // Subtract the total difference from 100 to calculate the compatibility score
-    let compatibilityScore = 100 - (totalDifference * 10); // We multiply by 10 to give a larger score range
+    // Calculate the average score
+    let sum = scores.reduce((a, b) => a + b, 0);
+    let average = sum / scores.length;
 
-    // Set thresholds for the results
-    let resultMessage = '';
-    if (compatibilityScore >= 80) {
-        resultMessage = "True Love!";
-    } else if (compatibilityScore >= 50) {
-        resultMessage = "Possible Friends!";
+    // Determine the personality type
+    let resultText = "";
+    if (average >= 4.5) {
+        resultText = "You are a Night Owl! 🌙 You enjoy staying up late and relaxing at night.";
+    } else if (average >= 3.5) {
+        resultText = "You are a Balanced Thinker! 🤔 You like a mix of day and night activities.";
+    } else if (average >= 2.5) {
+        resultText = "You are an Early Bird! 🌞 Mornings are your best time for energy and productivity.";
     } else {
-        resultMessage = "Run Away!";
+        resultText = "You prefer quiet and calm activities. 📖 You enjoy peaceful moments and solitude.";
     }
 
     // Display the result
-    document.getElementById("result").innerHTML = `
-        Compatibility Score: ${compatibilityScore}<br>
-        ${resultMessage}
-    `;
-});
+    document.getElementById("result").innerHTML = `<h2>${resultText}</h2>`;
+}
